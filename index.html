@@ -16,18 +16,89 @@
     background: #1a1a2e;
     color: #e8e0d0;
     min-height: 100dvh;
+    display: flex;
+    flex-direction: row;
+  }
+
+  /* ── Set list sidebar ── */
+  #sidebar {
+    width: 130px;
+    flex-shrink: 0;
+    background: #121220;
+    border-right: 1px solid #2a2a40;
+    overflow-y: auto;
+    height: 100dvh;
+    position: sticky;
+    top: 0;
+  }
+
+  #sidebar h3 {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #666;
+    padding: 10px 8px 4px;
+    font-family: -apple-system, sans-serif;
+    position: sticky;
+    top: 0;
+    background: #12122020;
+    backdrop-filter: blur(4px);
+  }
+
+  .year-group { margin-bottom: 4px; }
+
+  .year-label {
+    font-size: 10px;
+    font-weight: 700;
+    color: #7a6fa0;
+    padding: 6px 8px 2px;
+    font-family: -apple-system, sans-serif;
+    letter-spacing: 0.05em;
+  }
+
+  .set-row {
+    display: flex;
+    align-items: baseline;
+    gap: 5px;
+    padding: 3px 8px;
+    cursor: pointer;
+    border-radius: 4px;
+    margin: 0 4px;
+  }
+  .set-row:active { background: #2a2a3e; }
+
+  .set-code {
+    font-family: monospace;
+    font-size: 12px;
+    font-weight: 700;
+    color: #a090c0;
+    min-width: 36px;
+  }
+
+  .set-name {
+    font-size: 11px;
+    color: #888;
+    line-height: 1.3;
+    font-family: -apple-system, sans-serif;
+  }
+
+  /* ── Main content ── */
+  #main {
+    flex: 1;
     padding: 1rem;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 1rem;
+    overflow-y: auto;
   }
 
   .search-row {
     display: flex;
     gap: 8px;
     width: 100%;
-    max-width: 600px;
+    max-width: 500px;
   }
 
   input {
@@ -45,23 +116,7 @@
   }
   input::placeholder { color: #777; }
   input:focus { border-color: #7a6fa0; }
-  
-  #open-btn {
-    display: none;
-    width: 100%;
-    max-width: 600px;
-    font-family: 'Crimson Text', Georgia, serif;
-    font-size: 16px;
-    font-weight: 600;
-    padding: 10px;
-    border-radius: 8px;
-    border: 1px solid #7a6fa0;
-    background: transparent;
-    color: #a090c0;
-    cursor: pointer;
-    text-align: center;
-  }
-  #open-btn:active { background: #2a2a3e; }
+
   button {
     font-family: 'Crimson Text', Georgia, serif;
     font-size: 18px;
@@ -76,179 +131,292 @@
   }
   button:active { opacity: 0.8; }
 
-  #hint {
-    font-size: 14px;
-    color: #e08080;
-    min-height: 18px;
-    font-family: -apple-system, sans-serif;
-  }
-
-  #loading {
-    color: #aaa;
-    font-size: 16px;
+  #open-btn {
     display: none;
-    font-family: -apple-system, sans-serif;
+    width: 100%;
+    max-width: 500px;
+    font-family: 'Crimson Text', Georgia, serif;
+    font-size: 16px;
+    font-weight: 600;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #7a6fa0;
+    background: transparent;
+    color: #a090c0;
+    cursor: pointer;
+    text-align: center;
   }
+  #open-btn:active { background: #2a2a3e; }
+
+  #hint { font-size: 14px; color: #e08080; min-height: 18px; font-family: -apple-system, sans-serif; }
+  #loading { color: #aaa; font-size: 16px; display: none; font-family: -apple-system, sans-serif; }
 
   #result {
     display: none;
     width: 100%;
-    max-width: 600px;
+    max-width: 500px;
     flex-direction: row;
     gap: 1rem;
     align-items: flex-start;
   }
 
-  #card-img {
-    width: 45%;
-    min-width: 140px;
-    border-radius: 10px;
-    flex-shrink: 0;
-  }
+  #card-img { width: 45%; min-width: 120px; border-radius: 10px; flex-shrink: 0; }
 
-  .card-text {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
-
-  .card-name {
-    font-size: 17px;
-    font-weight: 600;
-    color: #f0e8d0;
-    line-height: 1.2;
-  }
-
-  .card-mana {
-    font-size: 13px;
-    color: #b0a080;
-    font-style: italic;
-  }
-
-  .card-type {
-    font-size: 13px;
-    color: #a09080;
-    border-top: 1px solid #444;
-    border-bottom: 1px solid #444;
-    padding: 4px 0;
-    font-style: italic;
-  }
-
-  .oracle {
-    font-size: 15px;
-    line-height: 1.5;
-    white-space: pre-wrap;
-    color: #d8d0c0;
-  }
-
-  .flavor {
-    font-size: 13px;
-    font-style: italic;
-    color: #907060;
-    border-top: 1px solid #333;
-    padding-top: 6px;
-    line-height: 1.4;
-  }
-
-  .pt {
-    font-size: 15px;
-    font-weight: 600;
-    color: #c0b090;
-    text-align: right;
-  }
+  .card-text { flex: 1; display: flex; flex-direction: column; gap: 6px; }
+  .card-name { font-size: 17px; font-weight: 600; color: #f0e8d0; line-height: 1.2; }
+  .card-mana { font-size: 13px; color: #b0a080; font-style: italic; }
+  .card-type { font-size: 13px; color: #a09080; border-top: 1px solid #444; border-bottom: 1px solid #444; padding: 4px 0; font-style: italic; }
+  .oracle { font-size: 15px; line-height: 1.5; white-space: pre-wrap; color: #d8d0c0; }
+  .flavor { font-size: 13px; font-style: italic; color: #907060; border-top: 1px solid #333; padding-top: 6px; line-height: 1.4; }
+  .pt { font-size: 15px; font-weight: 600; color: #c0b090; text-align: right; }
 </style>
 </head>
 <body>
 
-<div class="search-row">
-  <input type="text" id="q" placeholder="FIN 398"
-    autocomplete="off" autocorrect="off"
-    autocapitalize="characters" spellcheck="false"
-    onkeydown="if(event.key==='Enter')go()" />
-  <button onclick="go()">Search</button>
+<!-- Set reference sidebar -->
+<div id="sidebar">
+  <h3>Sets</h3>
+  <div id="set-list"></div>
 </div>
-<span id="hint"></span>
-<span id="loading">Loading…</span>
 
-
-<button id="open-btn" onclick="openScryfall()">Open on Scryfall ↗</button>
-<div id="result">
-  <img id="card-img" src="" alt="Card" />
-  <div class="card-text">
-    <div class="card-name" id="card-name"></div>
-    <div class="card-mana" id="card-mana"></div>
-    <div class="card-type" id="card-type"></div>
-    <div class="oracle" id="card-oracle"></div>
-    <div class="flavor" id="card-flavor"></div>
-    <div class="pt" id="card-pt"></div>
+<!-- Main lookup -->
+<div id="main">
+  <div class="search-row">
+    <input type="text" id="q" placeholder="FIN 398"
+      autocomplete="off" autocorrect="off"
+      autocapitalize="characters" spellcheck="false"
+      onkeydown="if(event.key==='Enter')go()" />
+    <button onclick="go()">Search</button>
+  </div>
+  <span id="hint"></span>
+  <span id="loading">Loading…</span>
+  <button id="open-btn" onclick="openScryfall()">Open on Scryfall ↗</button>
+  <div id="result">
+    <img id="card-img" src="" alt="Card" />
+    <div class="card-text">
+      <div class="card-name" id="card-name"></div>
+      <div class="card-mana" id="card-mana"></div>
+      <div class="card-type" id="card-type"></div>
+      <div class="oracle" id="card-oracle"></div>
+      <div class="flavor" id="card-flavor"></div>
+      <div class="pt" id="card-pt"></div>
+    </div>
   </div>
 </div>
 
 <script>
-  document.getElementById('q').focus();
-  function openScryfall() {
-    if (lastUrl) window.open(lastUrl, '_blank');
-  }
-  async function go() {
-    const val = document.getElementById('q').value.trim();
-    const m = val.match(/^([A-Za-z0-9]+)\s+(\d+\S*)$/);
-    const hint = document.getElementById('hint');
-    if (!m) { hint.textContent = 'Try: BOK 129'; return; }
-    hint.textContent = '';
-    const set = m[1].toLowerCase();
-    const cn = m[2];
+const SETS = [
+  { year: 2014, sets: [
+    { code: "CNS", name: "Conspiracy" },
+    { code: "JOU", name: "Journey into Nyx" },
+    { code: "BNG", name: "Born of the Gods" },
+  ]},
+  { year: 2013, sets: [
+    { code: "THS", name: "Theros" },
+    { code: "M14", name: "Magic 2014" },
+    { code: "DGM", name: "Dragon's Maze" },
+    { code: "GTC", name: "Gatecrash" },
+  ]},
+  { year: 2012, sets: [
+    { code: "RTR", name: "Return to Ravnica" },
+    { code: "M13", name: "Magic 2013" },
+    { code: "AVR", name: "Avacyn Restored" },
+    { code: "DKA", name: "Dark Ascension" },
+  ]},
+  { year: 2011, sets: [
+    { code: "ISD", name: "Innistrad" },
+    { code: "M12", name: "Magic 2012" },
+    { code: "NPH", name: "New Phyrexia" },
+    { code: "MBS", name: "Mirrodin Besieged" },
+  ]},
+  { year: 2010, sets: [
+    { code: "SOM", name: "Scars of Mirrodin" },
+    { code: "M11", name: "Magic 2011" },
+    { code: "ROE", name: "Rise of the Eldrazi" },
+    { code: "WWK", name: "Worldwake" },
+  ]},
+  { year: 2009, sets: [
+    { code: "ZEN", name: "Zendikar" },
+    { code: "M10", name: "Magic 2010" },
+    { code: "ARB", name: "Alara Reborn" },
+    { code: "CON", name: "Conflux" },
+  ]},
+  { year: 2008, sets: [
+    { code: "ALA", name: "Shards of Alara" },
+    { code: "EVE", name: "Eventide" },
+    { code: "SHM", name: "Shadowmoor" },
+    { code: "MOR", name: "Morningtide" },
+  ]},
+  { year: 2007, sets: [
+    { code: "LRW", name: "Lorwyn" },
+    { code: "FUT", name: "Future Sight" },
+    { code: "PLC", name: "Planar Chaos" },
+    { code: "10E", name: "Tenth Edition" },
+  ]},
+  { year: 2006, sets: [
+    { code: "TSP", name: "Time Spiral" },
+    { code: "CSP", name: "Coldsnap" },
+    { code: "DIS", name: "Dissension" },
+    { code: "GPT", name: "Guildpact" },
+  ]},
+  { year: 2005, sets: [
+    { code: "RAV", name: "Ravnica" },
+    { code: "9ED", name: "Ninth Edition" },
+    { code: "SOK", name: "Saviors of Kamigawa" },
+    { code: "BOK", name: "Betrayers of Kamigawa" },
+  ]},
+  { year: 2004, sets: [
+    { code: "CHK", name: "Champions of Kamigawa" },
+    { code: "5DN", name: "Fifth Dawn" },
+    { code: "DST", name: "Darksteel" },
+  ]},
+  { year: 2003, sets: [
+    { code: "MRD", name: "Mirrodin" },
+    { code: "8ED", name: "Eighth Edition" },
+    { code: "SCG", name: "Scourge" },
+    { code: "LGN", name: "Legions" },
+  ]},
+  { year: 2002, sets: [
+    { code: "ONS", name: "Onslaught" },
+    { code: "JUD", name: "Judgment" },
+    { code: "TOR", name: "Torment" },
+  ]},
+  { year: 2001, sets: [
+    { code: "ODY", name: "Odyssey" },
+    { code: "7ED", name: "Seventh Edition" },
+    { code: "APC", name: "Apocalypse" },
+    { code: "PLS", name: "Planeshift" },
+  ]},
+  { year: 2000, sets: [
+    { code: "INV", name: "Invasion" },
+    { code: "PCY", name: "Prophecy" },
+    { code: "NEM", name: "Nemesis" },
+  ]},
+  { year: 1999, sets: [
+    { code: "MMQ", name: "Mercadian Masques" },
+    { code: "6ED", name: "Sixth Edition" },
+    { code: "UDS", name: "Urza's Destiny" },
+    { code: "ULG", name: "Urza's Legacy" },
+  ]},
+  { year: 1998, sets: [
+    { code: "USG", name: "Urza's Saga" },
+    { code: "EXO", name: "Exodus" },
+    { code: "STH", name: "Stronghold" },
+  ]},
+  { year: 1997, sets: [
+    { code: "TMP", name: "Tempest" },
+    { code: "5ED", name: "Fifth Edition" },
+    { code: "WTH", name: "Weatherlight" },
+    { code: "VIS", name: "Visions" },
+  ]},
+  { year: 1996, sets: [
+    { code: "MIR", name: "Mirage" },
+    { code: "ALL", name: "Alliances" },
+  ]},
+  { year: 1995, sets: [
+    { code: "ICE", name: "Ice Age" },
+    { code: "HML", name: "Homelands" },
+    { code: "4ED", name: "Fourth Edition" },
+  ]},
+  { year: 1994, sets: [
+    { code: "LEG", name: "Legends" },
+    { code: "DRK", name: "The Dark" },
+    { code: "ATQ", name: "Antiquities" },
+    { code: "3ED", name: "Revised Edition" },
+  ]},
+  { year: 1993, sets: [
+    { code: "ARN", name: "Arabian Nights" },
+    { code: "LEA", name: "Alpha" },
+    { code: "LEB", name: "Beta" },
+  ]},
+];
 
-    document.getElementById('result').style.display = 'none';
-    document.getElementById('loading').style.display = 'block';
+// Render sidebar
+const list = document.getElementById('set-list');
+SETS.forEach(group => {
+  const yearDiv = document.createElement('div');
+  yearDiv.className = 'year-group';
+  const yearLabel = document.createElement('div');
+  yearLabel.className = 'year-label';
+  yearLabel.textContent = group.year;
+  yearDiv.appendChild(yearLabel);
+  group.sets.forEach(s => {
+    const row = document.createElement('div');
+    row.className = 'set-row';
+    row.innerHTML = '<span class="set-code">' + s.code + '</span><span class="set-name">' + s.name + '</span>';
+    row.onclick = () => {
+      document.getElementById('q').value = s.code + ' ';
+      document.getElementById('q').focus();
+    };
+    yearDiv.appendChild(row);
+  });
+  list.appendChild(yearDiv);
+});
 
-    try {
-      const res = await fetch('https://api.scryfall.com/cards/' + set + '/' + cn);
-      const card = await res.json();
-      document.getElementById('loading').style.display = 'none';
+// Search logic
+document.getElementById('q').focus();
+let lastUrl = '';
 
-      if (card.object === 'error') { hint.textContent = 'Card not found.'; return; }
+function openScryfall() {
+  if (lastUrl) window.open(lastUrl, '_blank');
+}
 
-      // Image
-      let imgUrl = card.image_uris?.normal
-        || card.card_faces?.[0]?.image_uris?.normal
-        || '';
+async function go() {
+  const parts = document.getElementById('q').value.trim().split(/\s+/);
+  const hint = document.getElementById('hint');
+  if (parts.length < 2) { hint.textContent = 'Try: FIN 398'; return; }
+  hint.textContent = '';
+  const set = parts[0].toLowerCase();
+  const cn = parts[1];
 
-      // Oracle + flavor — handle DFCs
-      let oracle = '', flavor = '';
-      if (card.oracle_text !== undefined) {
-        oracle = card.oracle_text;
-        flavor = card.flavor_text || '';
-      } else if (card.card_faces) {
-        oracle = card.card_faces.map(f => f.name + '\n' + (f.oracle_text || '')).join('\n\n//\n\n');
-        flavor = card.card_faces.map(f => f.flavor_text || '').filter(Boolean).join('\n\n');
-      }
+  lastUrl = 'https://scryfall.com/search?q=s:' + set + '+cn:' + cn;
 
-      // Mana cost
-      let mana = card.mana_cost || card.card_faces?.[0]?.mana_cost || '';
-      // Strip {W}{U} notation to simple text
-      mana = mana.replace(/\{([^}]+)\}/g, '$1').replace(/\//g, '');
+  document.getElementById('result').style.display = 'none';
+  document.getElementById('open-btn').style.display = 'none';
+  document.getElementById('loading').style.display = 'block';
 
-      // P/T or loyalty
-      let pt = '';
-      if (card.power) pt = card.power + ' / ' + card.toughness;
-      else if (card.loyalty) pt = 'Loyalty: ' + card.loyalty;
+  try {
+    const res = await fetch('https://api.scryfall.com/cards/' + set + '/' + cn);
+    const card = await res.json();
+    document.getElementById('loading').style.display = 'none';
 
-      document.getElementById('card-img').src = imgUrl;
-      document.getElementById('card-img').style.display = imgUrl ? 'block' : 'none';
-      document.getElementById('card-name').textContent = card.name;
-      document.getElementById('card-mana').textContent = mana;
-      document.getElementById('card-type').textContent = card.type_line;
-      document.getElementById('card-oracle').textContent = oracle;
-      document.getElementById('card-flavor').textContent = flavor;
-      document.getElementById('card-pt').textContent = pt;
-      document.getElementById('result').style.display = 'flex';
+    if (card.object === 'error') { hint.textContent = 'Card not found.'; return; }
+    if (card.scryfall_uri) lastUrl = card.scryfall_uri;
 
-    } catch (e) {
-      document.getElementById('loading').style.display = 'none';
-      hint.textContent = 'Error fetching card.';
+    const imgUrl = card.image_uris?.normal || card.card_faces?.[0]?.image_uris?.normal || '';
+
+    let oracle = '', flavor = '';
+    if (card.oracle_text !== undefined) {
+      oracle = card.oracle_text;
+      flavor = card.flavor_text || '';
+    } else if (card.card_faces) {
+      oracle = card.card_faces.map(f => f.name + '\n' + (f.oracle_text || '')).join('\n\n//\n\n');
+      flavor = card.card_faces.map(f => f.flavor_text || '').filter(Boolean).join('\n\n');
     }
+
+    let mana = card.mana_cost || card.card_faces?.[0]?.mana_cost || '';
+    mana = mana.replace(/\{([^}]+)\}/g, '$1').replace(/\//g, '');
+
+    let pt = '';
+    if (card.power) pt = card.power + ' / ' + card.toughness;
+    else if (card.loyalty) pt = 'Loyalty: ' + card.loyalty;
+
+    document.getElementById('card-img').src = imgUrl;
+    document.getElementById('card-img').style.display = imgUrl ? 'block' : 'none';
+    document.getElementById('card-name').textContent = card.name;
+    document.getElementById('card-mana').textContent = mana;
+    document.getElementById('card-type').textContent = card.type_line;
+    document.getElementById('card-oracle').textContent = oracle;
+    document.getElementById('card-flavor').textContent = flavor;
+    document.getElementById('card-pt').textContent = pt;
+    document.getElementById('result').style.display = 'flex';
+    document.getElementById('open-btn').style.display = 'block';
+
+  } catch (e) {
+    document.getElementById('loading').style.display = 'none';
+    hint.textContent = 'Error fetching card.';
   }
+}
 </script>
 </body>
 </html>
