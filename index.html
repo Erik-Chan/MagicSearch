@@ -128,41 +128,51 @@
 
   .search-row {
     display: flex;
-    gap: 8px;
+    gap: 6px;
     width: 100%;
     max-width: 500px;
   }
 
   input {
     flex: 1;
+    min-width: 0;
     font-family: 'Crimson Text', Georgia, serif;
-    font-size: 20px;
+    font-size: 18px;
     text-align: center;
-    padding: 10px 14px;
+    padding: 10px 8px;
     border-radius: 8px;
     border: 1px solid #444;
     background: #2a2a3e;
     color: #e8e0d0;
     outline: none;
     letter-spacing: 0.05em;
-    min-width: 0;
   }
   input::placeholder { color: #777; }
   input:focus { border-color: #7a6fa0; }
 
-  button {
+  .btn {
     font-family: 'Crimson Text', Georgia, serif;
     font-size: 18px;
     font-weight: 600;
-    padding: 10px 20px;
+    padding: 10px 16px;
     border-radius: 8px;
     border: none;
-    background: #7a6fa0;
-    color: #fff;
     cursor: pointer;
     white-space: nowrap;
+    flex-shrink: 0;
   }
-  button:active { opacity: 0.8; }
+  .btn:active { opacity: 0.8; }
+
+  #search-btn { background: #7a6fa0; color: #fff; }
+
+  #clear-btn {
+    background: #2a2a3e;
+    color: #888;
+    border: 1px solid #444;
+    font-size: 16px;
+    padding: 10px 12px;
+  }
+  #clear-btn:active { background: #1e1e30; }
 
   #open-btn {
     display: none;
@@ -199,7 +209,7 @@
   .card-name { font-size: 19px; font-weight: 600; color: #f0e8d0; line-height: 1.2; }
   .card-mana { font-size: 14px; color: #b0a080; font-style: italic; }
   .card-type { font-size: 14px; color: #a09080; border-top: 1px solid #444; border-bottom: 1px solid #444; padding: 4px 0; font-style: italic; }
-  .oracle { font-size: 16px; line-height: 1.5; white-space: pre-wrap; color: #d8d0c0; }
+  .oracle { font-size: 18px; line-height: 1.5; white-space: pre-wrap; color: #d8d0c0; }
   .flavor { font-size: 14px; font-style: italic; color: #907060; border-top: 1px solid #333; padding-top: 6px; line-height: 1.4; }
   .pt { font-size: 15px; font-weight: 600; color: #c0b090; text-align: right; }
 </style>
@@ -216,11 +226,12 @@
 
 <div id="main">
   <div class="search-row">
+    <button class="btn" id="clear-btn" onclick="clearInput()" title="Clear">✕</button>
     <input type="text" id="q" placeholder="RAV 112"
       autocomplete="off" autocorrect="off"
       autocapitalize="characters" spellcheck="false"
       onkeydown="if(event.key==='Enter')go()" />
-    <button onclick="go()">Search</button>
+    <button class="btn" id="search-btn" onclick="go()">Search</button>
   </div>
   <span id="hint"></span>
   <span id="loading">Loading…</span>
@@ -328,13 +339,11 @@ const SETS = [
   ]},
   { year: 1999, sets: [
     { code: "MMQ", name: "Mercadian Masques" },
-    { code: "6ED", name: "Sixth Edition" },
     { code: "UDS", name: "Urza's Destiny" },
     { code: "ULG", name: "Urza's Legacy" },
-  ]}
+  ]},
 ];
 
-// Render sidebar
 const list = document.getElementById('set-list');
 SETS.forEach(group => {
   const yearDiv = document.createElement('div');
@@ -349,7 +358,6 @@ SETS.forEach(group => {
     row.onclick = () => {
       document.getElementById('q').value = s.code + ' ';
       document.getElementById('q').focus();
-      // close sidebar on mobile after tap
       if (window.innerWidth < 600) toggleSidebar(false);
     };
     yearDiv.appendChild(row);
@@ -366,7 +374,15 @@ function toggleSidebar(forceClose) {
   }
 }
 
-// Search
+function clearInput() {
+  const q = document.getElementById('q');
+  q.value = '';
+  q.focus();
+  document.getElementById('hint').textContent = '';
+  document.getElementById('result').style.display = 'none';
+  document.getElementById('open-btn').style.display = 'none';
+}
+
 document.getElementById('q').focus();
 let lastUrl = '';
 
