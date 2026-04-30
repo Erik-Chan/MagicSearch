@@ -16,114 +16,11 @@
     background: #1a1a2e;
     color: #e8e0d0;
     min-height: 100dvh;
-    display: flex;
-    flex-direction: row;
-  }
-
-  /* ── Sidebar ── */
-  #sidebar {
-    flex-shrink: 0;
-    background: #121220;
-    border-right: 1px solid #2a2a40;
-    height: 100dvh;
-    position: sticky;
-    top: 0;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    transition: width 0.25s ease;
-    width: 28px;
-  }
-  #sidebar.open { width: 150px; }
-
-  #toggle-btn {
-    flex-shrink: 0;
-    width: 100%;
-    padding: 12px 0;
-    background: none;
-    border: none;
-    border-bottom: 1px solid #2a2a40;
-    color: #7a6fa0;
-    font-size: 16px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  #toggle-btn:active { background: #1e1e30; }
-
-  #sidebar-inner {
-    overflow-y: auto;
-    overflow-x: hidden;
-    flex: 1;
-    opacity: 0;
-    transition: opacity 0.15s ease;
-    pointer-events: none;
-  }
-  #sidebar.open #sidebar-inner {
-    opacity: 1;
-    pointer-events: auto;
-  }
-
-  #sidebar-inner h3 {
-    font-size: 10px;
-    font-weight: 600;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: #555;
-    padding: 8px 8px 4px;
-    font-family: -apple-system, sans-serif;
-    white-space: nowrap;
-  }
-
-  .year-label {
-    font-size: 10px;
-    font-weight: 700;
-    color: #7a6fa0;
-    padding: 6px 8px 2px;
-    font-family: -apple-system, sans-serif;
-    letter-spacing: 0.05em;
-    white-space: nowrap;
-  }
-
-  .set-row {
-    display: flex;
-    align-items: baseline;
-    gap: 5px;
-    padding: 3px 8px;
-    cursor: pointer;
-    border-radius: 4px;
-    margin: 0 3px;
-    white-space: nowrap;
-  }
-  .set-row:active { background: #2a2a3e; }
-
-  .set-code {
-    font-family: monospace;
-    font-size: 12px;
-    font-weight: 700;
-    color: #a090c0;
-    min-width: 34px;
-  }
-
-  .set-name {
-    font-size: 11px;
-    color: #777;
-    font-family: -apple-system, sans-serif;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  /* ── Main ── */
-  #main {
-    flex: 1;
     padding: 1rem;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 1rem;
-    overflow-y: auto;
-    min-width: 0;
   }
 
   .search-row {
@@ -162,9 +59,7 @@
     flex-shrink: 0;
   }
   .btn:active { opacity: 0.8; }
-
   #search-btn { background: #7a6fa0; color: #fff; }
-
   #clear-btn {
     background: #2a2a3e;
     color: #888;
@@ -200,251 +95,236 @@
     max-width: 500px;
     flex-direction: column;
     gap: 1rem;
-    align-items: flex-start;
   }
 
-  #card-img { width: 100%; border-radius: 12px; }
+  /* Card flip */
+  #card-wrap { width: 100%; perspective: 1000px; position: relative; }
+  #card-wrap.flippable { cursor: pointer; }
 
-  .card-text { width: 100%; display: flex; flex-direction: column; gap: 6px; }
-  .card-name { font-size: 19px; font-weight: 600; color: #f0e8d0; line-height: 1.2; }
-  .card-mana { font-size: 14px; color: #b0a080; font-style: italic; }
-  .card-type { font-size: 14px; color: #a09080; border-top: 1px solid #444; border-bottom: 1px solid #444; padding: 4px 0; font-style: italic; }
-  .oracle { font-size: 18px; line-height: 1.5; white-space: pre-wrap; color: #d8d0c0; }
-  .flavor { font-size: 14px; font-style: italic; color: #907060; border-top: 1px solid #333; padding-top: 6px; line-height: 1.4; }
+  #card-flipper {
+    width: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.45s ease;
+  }
+  #card-wrap.flipped #card-flipper { transform: rotateY(180deg); }
+
+  #card-front, #card-back {
+    width: 100%;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  #card-back {
+    position: absolute;
+    top: 0; left: 0;
+    transform: rotateY(180deg);
+    display: none;
+  }
+  #card-front img, #card-back img { width: 100%; display: block; border-radius: 12px; }
+
+  #flip-icon {
+    display: none;
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.6);
+    border: 1.5px solid rgba(255,255,255,0.25);
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    pointer-events: none;
+  }
+  #flip-icon svg { width: 20px; height: 20px; fill: rgba(255,255,255,0.8); }
+
+  /* Mana symbols */
+  .mana-sym {
+    display: inline-block;
+    width: 1.15em;
+    height: 1.15em;
+    vertical-align: middle;
+    margin: 0 0.05em;
+    position: relative;
+    top: -0.05em;
+  }
+
+  .card-text { display: flex; flex-direction: column; gap: 6px; }
+  .card-name { font-size: 22px; font-weight: 600; color: #f0e8d0; line-height: 1.2; }
+  .card-mana { font-size: 19px; color: #b0a080; line-height: 1.8; }
+  .card-type { font-size: 18px; color: #d8d0c0; border-top: 1px solid #444; border-bottom: 1px solid #444; padding: 4px 0; font-style: italic; }
+  .oracle { font-size: 19px; line-height: 1.7; color: #d8d0c0; }
+  .flavor { font-size: 16px; font-style: italic; color: #907060; border-top: 1px solid #333; padding-top: 6px; line-height: 1.4; }
   .pt { font-size: 15px; font-weight: 600; color: #c0b090; text-align: right; }
 </style>
 </head>
 <body>
 
-<div id="sidebar">
-  <button id="toggle-btn" onclick="toggleSidebar()" title="Toggle set list">☰</button>
-  <div id="sidebar-inner">
-    <h3>Sets</h3>
-    <div id="set-list"></div>
-  </div>
+<div class="search-row">
+  <button class="btn" id="clear-btn" onclick="clearInput()">✕</button>
+  <input type="text" id="q" placeholder="FIN 398"
+    autocomplete="off" autocorrect="off"
+    autocapitalize="characters" spellcheck="false"
+    onkeydown="if(event.key==='Enter')go()" />
+  <button class="btn" id="search-btn" onclick="go()">Search</button>
 </div>
+<span id="hint"></span>
+<span id="loading">Loading…</span>
+<button id="open-btn" onclick="openScryfall()">Open on Scryfall ↗</button>
 
-<div id="main">
-  <div class="search-row">
-    <button class="btn" id="clear-btn" onclick="clearInput()" title="Clear">✕</button>
-    <input type="text" id="q" placeholder="RAV 112"
-      autocomplete="off" autocorrect="off"
-      autocapitalize="characters" spellcheck="false"
-      onkeydown="if(event.key==='Enter')go()" />
-    <button class="btn" id="search-btn" onclick="go()">Search</button>
-  </div>
-  <span id="hint"></span>
-  <span id="loading">Loading…</span>
-  <button id="open-btn" onclick="openScryfall()">Open on Scryfall ↗</button>
-  <div id="result">
-    <img id="card-img" src="" alt="Card" />
-    <div class="card-text">
-      <div class="card-name" id="card-name"></div>
-      <div class="card-mana" id="card-mana"></div>
-      <div class="card-type" id="card-type"></div>
-      <div class="oracle" id="card-oracle"></div>
-      <div class="flavor" id="card-flavor"></div>
-      <div class="pt" id="card-pt"></div>
+<div id="result">
+  <div id="card-wrap">
+    <div id="card-flipper">
+      <div id="card-front"><img id="card-img-front" src="" alt="Card front" /></div>
+      <div id="card-back"><img id="card-img-back" src="" alt="Card back" /></div>
     </div>
+    <div id="flip-icon">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/>
+      </svg>
+    </div>
+  </div>
+  <div class="card-text">
+    <div class="card-name" id="card-name"></div>
+    <div class="card-mana" id="card-mana"></div>
+    <div class="card-type" id="card-type"></div>
+    <div class="oracle" id="card-oracle"></div>
+    <div class="flavor" id="card-flavor"></div>
+    <div class="pt" id="card-pt"></div>
   </div>
 </div>
 
 <script>
-const SETS = [
-  { year: 2014, sets: [
-    { code: "CNS", name: "Conspiracy" },
-    { code: "JOU", name: "Journey into Nyx" },
-    { code: "BNG", name: "Born of the Gods" },
-  ]},
-  { year: 2013, sets: [
-    { code: "THS", name: "Theros" },
-    { code: "M14", name: "Magic 2014" },
-    { code: "DGM", name: "Dragon's Maze" },
-    { code: "GTC", name: "Gatecrash" },
-  ]},
-  { year: 2012, sets: [
-    { code: "RTR", name: "Return to Ravnica" },
-    { code: "M13", name: "Magic 2013" },
-    { code: "AVR", name: "Avacyn Restored" },
-    { code: "DKA", name: "Dark Ascension" },
-  ]},
-  { year: 2011, sets: [
-    { code: "ISD", name: "Innistrad" },
-    { code: "M12", name: "Magic 2012" },
-    { code: "NPH", name: "New Phyrexia" },
-    { code: "MBS", name: "Mirrodin Besieged" },
-  ]},
-  { year: 2010, sets: [
-    { code: "SOM", name: "Scars of Mirrodin" },
-    { code: "M11", name: "Magic 2011" },
-    { code: "ROE", name: "Rise of the Eldrazi" },
-    { code: "WWK", name: "Worldwake" },
-  ]},
-  { year: 2009, sets: [
-    { code: "ZEN", name: "Zendikar" },
-    { code: "M10", name: "Magic 2010" },
-    { code: "ARB", name: "Alara Reborn" },
-    { code: "CON", name: "Conflux" },
-  ]},
-  { year: 2008, sets: [
-    { code: "ALA", name: "Shards of Alara" },
-    { code: "EVE", name: "Eventide" },
-    { code: "SHM", name: "Shadowmoor" },
-    { code: "MOR", name: "Morningtide" },
-  ]},
-  { year: 2007, sets: [
-    { code: "LRW", name: "Lorwyn" },
-    { code: "FUT", name: "Future Sight" },
-    { code: "PLC", name: "Planar Chaos" },
-    { code: "10E", name: "Tenth Edition" },
-  ]},
-  { year: 2006, sets: [
-    { code: "TSP", name: "Time Spiral" },
-    { code: "CSP", name: "Coldsnap" },
-    { code: "DIS", name: "Dissension" },
-    { code: "GPT", name: "Guildpact" },
-  ]},
-  { year: 2005, sets: [
-    { code: "RAV", name: "Ravnica" },
-    { code: "9ED", name: "Ninth Edition" },
-    { code: "SOK", name: "Saviors of Kamigawa" },
-    { code: "BOK", name: "Betrayers of Kamigawa" },
-  ]},
-  { year: 2004, sets: [
-    { code: "CHK", name: "Champions of Kamigawa" },
-    { code: "5DN", name: "Fifth Dawn" },
-    { code: "DST", name: "Darksteel" },
-  ]},
-  { year: 2003, sets: [
-    { code: "MRD", name: "Mirrodin" },
-    { code: "8ED", name: "Eighth Edition" },
-    { code: "SCG", name: "Scourge" },
-    { code: "LGN", name: "Legions" },
-  ]},
-  { year: 2002, sets: [
-    { code: "ONS", name: "Onslaught" },
-    { code: "JUD", name: "Judgment" },
-    { code: "TOR", name: "Torment" },
-  ]},
-  { year: 2001, sets: [
-    { code: "ODY", name: "Odyssey" },
-    { code: "7ED", name: "Seventh Edition" },
-    { code: "APC", name: "Apocalypse" },
-    { code: "PLS", name: "Planeshift" },
-  ]},
-  { year: 2000, sets: [
-    { code: "INV", name: "Invasion" },
-    { code: "PCY", name: "Prophecy" },
-    { code: "NEM", name: "Nemesis" },
-  ]},
-  { year: 1999, sets: [
-    { code: "MMQ", name: "Mercadian Masques" },
-    { code: "UDS", name: "Urza's Destiny" },
-    { code: "ULG", name: "Urza's Legacy" },
-  ]},
-];
+  // Cache: symbol string (e.g. "W", "2/U") -> data URI string
+  const symCache = {};
 
-const list = document.getElementById('set-list');
-SETS.forEach(group => {
-  const yearDiv = document.createElement('div');
-  const yearLabel = document.createElement('div');
-  yearLabel.className = 'year-label';
-  yearLabel.textContent = group.year;
-  yearDiv.appendChild(yearLabel);
-  group.sets.forEach(s => {
-    const row = document.createElement('div');
-    row.className = 'set-row';
-    row.innerHTML = '<span class="set-code">' + s.code + '</span><span class="set-name">' + s.name + '</span>';
-    row.onclick = () => {
-      document.getElementById('q').value = s.code + ' ';
-      document.getElementById('q').focus();
-      if (window.innerWidth < 600) toggleSidebar(false);
-    };
-    yearDiv.appendChild(row);
-  });
-  list.appendChild(yearDiv);
-});
-
-function toggleSidebar(forceClose) {
-  const sb = document.getElementById('sidebar');
-  if (forceClose === false || sb.classList.contains('open')) {
-    sb.classList.remove('open');
-  } else {
-    sb.classList.add('open');
+  // Fetch all symbols from Scryfall catalog once on load
+  async function loadSymbols() {
+    try {
+      const res = await fetch('https://api.scryfall.com/symbology');
+      const data = await res.json();
+      await Promise.all(data.data.map(async sym => {
+        const key = sym.symbol.replace(/[{}]/g, ''); // e.g. "{W}" -> "W"
+        try {
+          const svgRes = await fetch(sym.svg_uri);
+          const svgText = await svgRes.text();
+          const encoded = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgText);
+          symCache[key] = encoded;
+        } catch (_) {}
+      }));
+    } catch (_) {}
   }
-}
 
-function clearInput() {
-  const q = document.getElementById('q');
-  q.value = '';
-  q.focus();
-  document.getElementById('hint').textContent = '';
-  document.getElementById('result').style.display = 'none';
-  document.getElementById('open-btn').style.display = 'none';
-}
+  function renderMana(text) {
+    return text.replace(/\{([^}]+)\}/g, (_, sym) => {
+      const uri = symCache[sym];
+      if (uri) return '<img class="mana-sym" src="' + uri + '" alt="{' + sym + '}" title="{' + sym + '}">';
+      return '<span style="font-size:0.8em;background:#333;border-radius:50%;padding:1px 4px;">' + sym + '</span>';
+    });
+  }
 
-document.getElementById('q').focus();
-let lastUrl = '';
+  function renderOracle(text) {
+    return text.split('\n').map(line => renderMana(line)).join('<br>');
+  }
 
-function openScryfall() {
-  if (lastUrl) window.open(lastUrl, '_blank');
-}
+  function setFaceText(face) {
+    document.getElementById('card-name').textContent = face.name;
+    document.getElementById('card-mana').innerHTML = renderMana(face.mana_cost || '');
+    document.getElementById('card-type').textContent = face.type_line || '';
+    document.getElementById('card-oracle').innerHTML = renderOracle(face.oracle_text || '');
+    document.getElementById('card-flavor').textContent = face.flavor_text || '';
+    document.getElementById('card-pt').textContent = face.power ? face.power + ' / ' + face.toughness : (face.loyalty ? 'Loyalty: ' + face.loyalty : '');
+  }
 
-async function go() {
-  const parts = document.getElementById('q').value.trim().split(/\s+/);
-  const hint = document.getElementById('hint');
-  if (parts.length < 2) { hint.textContent = 'Try: RAV 112'; return; }
-  hint.textContent = '';
-  const set = parts[0].toLowerCase();
-  const cn = parts[1];
-
-  lastUrl = 'https://scryfall.com/search?q=s:' + set + '+cn:' + cn;
-  document.getElementById('result').style.display = 'none';
-  document.getElementById('open-btn').style.display = 'none';
-  document.getElementById('loading').style.display = 'block';
-
-  try {
-    const res = await fetch('https://api.scryfall.com/cards/' + set + '/' + cn);
-    const card = await res.json();
-    document.getElementById('loading').style.display = 'none';
-
-    if (card.object === 'error') { hint.textContent = 'Card not found.'; return; }
-    if (card.scryfall_uri) lastUrl = card.scryfall_uri;
-
-    const imgUrl = card.image_uris?.normal || card.card_faces?.[0]?.image_uris?.normal || '';
-
-    let oracle = '', flavor = '';
-    if (card.oracle_text !== undefined) {
-      oracle = card.oracle_text;
-      flavor = card.flavor_text || '';
-    } else if (card.card_faces) {
-      oracle = card.card_faces.map(f => f.name + '\n' + (f.oracle_text || '')).join('\n\n//\n\n');
-      flavor = card.card_faces.map(f => f.flavor_text || '').filter(Boolean).join('\n\n');
-    }
-
-    let mana = card.mana_cost || card.card_faces?.[0]?.mana_cost || '';
-    mana = mana.replace(/\{([^}]+)\}/g, '$1').replace(/\//g, '');
-
-    let pt = '';
-    if (card.power) pt = card.power + ' / ' + card.toughness;
-    else if (card.loyalty) pt = 'Loyalty: ' + card.loyalty;
-
-    document.getElementById('card-img').src = imgUrl;
-    document.getElementById('card-img').style.display = imgUrl ? 'block' : 'none';
+  function setSingleText(card) {
     document.getElementById('card-name').textContent = card.name;
-    document.getElementById('card-mana').textContent = mana;
-    document.getElementById('card-type').textContent = card.type_line;
-    document.getElementById('card-oracle').textContent = oracle;
-    document.getElementById('card-flavor').textContent = flavor;
-    document.getElementById('card-pt').textContent = pt;
-    document.getElementById('result').style.display = 'flex';
-    document.getElementById('open-btn').style.display = 'block';
-
-  } catch (e) {
-    document.getElementById('loading').style.display = 'none';
-    hint.textContent = 'Error fetching card.';
+    document.getElementById('card-mana').innerHTML = renderMana(card.mana_cost || '');
+    document.getElementById('card-type').textContent = card.type_line || '';
+    document.getElementById('card-oracle').innerHTML = renderOracle(card.oracle_text || '');
+    document.getElementById('card-flavor').textContent = card.flavor_text || '';
+    document.getElementById('card-pt').textContent = card.power ? card.power + ' / ' + card.toughness : (card.loyalty ? 'Loyalty: ' + card.loyalty : '');
   }
-}
+
+  let cardFaces = null;
+  let lastUrl = '';
+
+  function flipCard() {
+    if (!cardFaces) return;
+    const wrap = document.getElementById('card-wrap');
+    const flipped = wrap.classList.toggle('flipped');
+    setFaceText(cardFaces[flipped ? 1 : 0]);
+  }
+
+  function openScryfall() {
+    if (lastUrl) window.open(lastUrl, '_blank');
+  }
+
+  function clearInput() {
+    document.getElementById('q').value = '';
+    document.getElementById('q').focus();
+    document.getElementById('hint').textContent = '';
+    document.getElementById('result').style.display = 'none';
+    document.getElementById('open-btn').style.display = 'none';
+  }
+
+  document.getElementById('q').focus();
+  loadSymbols(); // fetch once on page load
+
+  async function go() {
+    const parts = document.getElementById('q').value.trim().split(/\s+/);
+    const hint = document.getElementById('hint');
+    if (parts.length < 2) { hint.textContent = 'Try: FIN 398'; return; }
+    hint.textContent = '';
+    const set = parts[0].toLowerCase();
+    const cn = parts[1];
+
+    lastUrl = 'https://scryfall.com/search?q=s:' + set + '+cn:' + cn;
+    cardFaces = null;
+
+    const wrap = document.getElementById('card-wrap');
+    wrap.classList.remove('flipped', 'flippable');
+    wrap.onclick = null;
+    document.getElementById('flip-icon').style.display = 'none';
+    document.getElementById('card-back').style.display = 'none';
+    document.getElementById('result').style.display = 'none';
+    document.getElementById('open-btn').style.display = 'none';
+    document.getElementById('loading').style.display = 'block';
+
+    try {
+      const res = await fetch('https://api.scryfall.com/cards/' + set + '/' + cn);
+      const card = await res.json();
+      document.getElementById('loading').style.display = 'none';
+
+      if (card.object === 'error') { hint.textContent = 'Card not found.'; return; }
+      if (card.scryfall_uri) lastUrl = card.scryfall_uri;
+
+      const isDFC = card.card_faces && card.card_faces[0].image_uris;
+
+      if (isDFC) {
+        cardFaces = card.card_faces;
+        document.getElementById('card-img-front').src = cardFaces[0].image_uris.normal;
+        document.getElementById('card-img-back').src = cardFaces[1].image_uris.normal;
+        document.getElementById('card-back').style.display = 'block';
+        wrap.classList.add('flippable');
+        wrap.onclick = flipCard;
+        document.getElementById('flip-icon').style.display = 'flex';
+        setFaceText(cardFaces[0]);
+      } else {
+        document.getElementById('card-img-front').src = card.image_uris?.normal || '';
+        setSingleText(card);
+      }
+
+      document.getElementById('result').style.display = 'flex';
+      document.getElementById('open-btn').style.display = 'block';
+
+    } catch (e) {
+      document.getElementById('loading').style.display = 'none';
+      hint.textContent = 'Error fetching card.';
+    }
+  }
 </script>
 </body>
 </html>
